@@ -18,7 +18,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+typical usage to batch process
+
+```sh
+url=(YOUR SPREADSHEET URL)
+user=(YOUR SPREADSHEET EMAIL ADDRESS)
+pass=(YOUR PASSWORD) # FIXME
+datetime=`date +%Y%m%d %H:00:00`
+num1=123
+num2=456
+num3=789
+
+echo $datetime $num1 $num2 $num3 | gspush $url -u $user -p $pass
+```
+
+then append your numbers to the spreadsheet
 
 ## Contributing
 
