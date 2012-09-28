@@ -1,8 +1,10 @@
 require 'optparse'
 require 'google_drive'
 
+require_relative './gspush/version'
 
 class Gspush
+  class WorksheetNotFound < StandardError; end
 
   attr_reader :url, :delimiter, :lines
 
@@ -41,6 +43,7 @@ class Gspush
     spreadsheet = open(@url, @username, @password)
 
     sheet = select_worksheet(spreadsheet)
+    raise WorksheetNotFound if sheet.nil?
     update(sheet, parse_lines)
   end
 
@@ -83,14 +86,21 @@ class Gspush
       options = {}
 
       opt = OptionParser.new
-      opt.on('-d delim')    {|v| options[:delimiter] = v }
-      opt.on('-n')          {|v| options[:nullpush] = v }
-      opt.on('-u username') {|v| options[:username] = v }
-      opt.on('-p password') {|v| options[:password] = v } # XXX how should i get this?
-      opt.on('-s sheet_title') {|v| options[:sheet_title] = v }
-      opt.on('-t') {|v| options[:prepend_timestamp] = v }
+      opt.on('-d delim', 'input delimiter') {|v| options[:delimiter] = v }
+      opt.on('-u username', 'Google Drive username(email)') {|v| options[:username] = v }
+      opt.on('-p password', 'user password') {|v| options[:password] = v } # XXX how should i get this?
+      opt.on('-s sheet_title', 'worksheet title (default: first worksheet)') {|v| options[:sheet_title] = v }
+      opt.on('-t', 'prepend timestamp cell') {|v| options[:prepend_timestamp] = v }
+
+      opt.banner = "Usage: gspush URL [options]"
+      opt.version = Gspush::VERSION
 
       argv = opt.parse(argv_original)
+
+      if argv.empty?
+        puts opt.banner
+        exit 1
+      end
 
       [argv, options]
     end
