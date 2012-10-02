@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require File.expand_path(File.dirname(__FILE__) + '/../lib/gspush/oauth2')
+
+# FIXME: give file path
+Gspush::Oauth2.generate
+

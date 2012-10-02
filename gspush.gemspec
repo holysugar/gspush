@@ -16,5 +16,8 @@ Gem::Specification.new do |gem|
   gem.version       = Gspush::VERSION
 
   gem.add_dependency "google_drive"
-  gem.add_development_dependency "rspec"
+
+  ["rspec", "fakefs"].each do |g|
+    gem.add_development_dependency g
+  end
 end

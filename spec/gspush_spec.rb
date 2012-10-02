@@ -1,4 +1,4 @@
-require 'gspush'
+require 'spec_helper'
 
 describe Gspush do
   let(:url) { 'http://example.com/ '} # FIXME
